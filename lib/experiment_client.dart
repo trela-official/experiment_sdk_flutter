@@ -12,12 +12,12 @@ class GetSourceAndVariantResult {
   GetSourceAndVariantResult({this.variant, required this.source});
 }
 
-class AmplitudeExperiment {
+class ExperimentClient {
   final ExperimentConfig? _config;
   final HttpClient _httpClient;
   final LocalStorage _localStorage;
 
-  AmplitudeExperiment({required String apiKey, ExperimentConfig? config})
+  ExperimentClient({required String apiKey, ExperimentConfig? config})
       : _config = config,
         _httpClient = HttpClient(apiKey: apiKey),
         _localStorage = LocalStorage(apiKey: apiKey) {
@@ -33,6 +33,9 @@ class AmplitudeExperiment {
 
     await _httpClient.get(input);
 
+    _log(
+        '[Experiment] Fetched ${_httpClient.fetchResult.length} for this user!');
+
     _storeVariants();
   }
 
@@ -44,6 +47,8 @@ class AmplitudeExperiment {
 
       variant = result?.variant;
     }
+
+    _log('[Experiment] Variant for $flagKey is ${variant?.value}');
 
     return variant;
   }
@@ -63,9 +68,14 @@ class AmplitudeExperiment {
     } else if (variant != null && exposureTrackerProvider != null) {
       exposureTrackerProvider.exposure(key, variant, instanceName);
     }
+
+    _log('[Experiment] Exposure event logged for $key with variant: ${variant?.value}');
   }
 
-  clear() {}
+  clear() {
+    _localStorage.clear();
+    _localStorage.save();
+  }
 
   GetSourceAndVariantResult? _getSourceAndVariant(String key) {
     final sourceVariant = _httpClient.fetchResult[key]?.toVariant();
@@ -95,5 +105,9 @@ class AmplitudeExperiment {
     _localStorage.save();
   }
 
-  _log() {}
+  _log(String message) {
+    if (_config?.debug ?? false) {
+      print(message);
+    }
+  }
 }
