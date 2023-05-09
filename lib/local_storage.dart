@@ -55,7 +55,9 @@ class LocalStorage {
   }
 
   static _getNamespace(String apiKey) {
-    String shortApiKey = apiKey.substring(apiKey.length - 6);
+    final apiKeyToSubstring = apiKey.length > 6 ? apiKey : 'default-api-key';
+    String shortApiKey =
+        apiKeyToSubstring.substring(apiKeyToSubstring.length - 6);
 
     return 'ampli-$shortApiKey';
   }

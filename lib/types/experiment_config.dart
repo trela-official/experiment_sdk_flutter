@@ -7,7 +7,6 @@ class ExperimentConfig {
   final String? instanceName;
   final ExperimentVariant? fallbackVariant;
   final ExperimentVariantSource? source;
-  final String? serverUrl;
   final int? fetchTimeoutMillis;
   final bool? retryFetchOnFailure;
   final bool? automaticExposureTracking;
@@ -18,7 +17,6 @@ class ExperimentConfig {
       this.instanceName = 'default-instance',
       this.fallbackVariant,
       this.source,
-      this.serverUrl,
       this.fetchTimeoutMillis,
       this.retryFetchOnFailure,
       this.automaticExposureTracking = false,
@@ -29,7 +27,6 @@ class ExperimentConfig {
       String? instanceName,
       ExperimentVariant? fallbackVariant,
       ExperimentVariantSource? source,
-      String? serverUrl,
       int? fetchTimeoutMillis,
       bool? retryFetchOnFailure,
       bool? automaticExposureTracking,
@@ -39,7 +36,6 @@ class ExperimentConfig {
         instanceName: instanceName ?? this.instanceName,
         fallbackVariant: fallbackVariant ?? this.fallbackVariant,
         source: source ?? this.source,
-        serverUrl: serverUrl ?? this.serverUrl,
         fetchTimeoutMillis: fetchTimeoutMillis ?? this.fetchTimeoutMillis,
         retryFetchOnFailure: retryFetchOnFailure ?? this.retryFetchOnFailure,
         automaticExposureTracking:

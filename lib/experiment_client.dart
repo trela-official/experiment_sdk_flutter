@@ -19,12 +19,13 @@ class ExperimentClient {
 
   ExperimentClient({required String apiKey, ExperimentConfig? config})
       : _config = config,
-        _httpClient = HttpClient(apiKey: apiKey),
+        _httpClient = HttpClient(
+            apiKey: apiKey, shouldRetry: config?.retryFetchOnFailure),
         _localStorage = LocalStorage(apiKey: apiKey) {
     _localStorage.load();
   }
 
-  fetch(
+  Future<void> fetch(
       {String? userId,
       String? deviceId,
       Map<String, dynamic>? userProperties}) async {
@@ -48,6 +49,11 @@ class ExperimentClient {
       variant = result?.variant;
     }
 
+    if (_config?.automaticExposureTracking != null &&
+        _config!.automaticExposureTracking!) {
+      exposure(flagKey);
+    }
+
     _log('[Experiment] Variant for $flagKey is ${variant?.value}');
 
     return variant;
@@ -69,7 +75,8 @@ class ExperimentClient {
       exposureTrackerProvider.exposure(key, variant, instanceName);
     }
 
-    _log('[Experiment] Exposure event logged for $key with variant: ${variant?.value}');
+    _log(
+        '[Experiment] Exposure event logged for $key with variant: ${variant?.value}');
   }
 
   clear() {

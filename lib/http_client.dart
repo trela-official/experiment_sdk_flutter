@@ -11,11 +11,14 @@ abstract class QueryParameters {
 class HttpClient {
   final String _apiKey;
   final String _baseUri = 'api.lab.amplitude.com';
+  final bool _shouldRetry;
 
-  HttpClient({required apiKey}) : _apiKey = apiKey;
+  HttpClient({required apiKey, bool? shouldRetry})
+      : _apiKey = apiKey,
+        _shouldRetry = shouldRetry ?? true;
 
   bool _isRetry = false;
-  late Map<String, ExperimentFetchItem> fetchResult;
+  Map<String, ExperimentFetchItem> fetchResult = {};
 
   Future<void> get(QueryParameters queryParameters) async {
     final uri = Uri.https(_baseUri, '/v1/vardata', queryParameters.toJson());
@@ -25,7 +28,7 @@ class HttpClient {
     if (response.statusCode != 200) {
       String data = response.body;
 
-      if (_isRetry) {
+      if (!_isRetry && _shouldRetry) {
         // If the server did not return a 200 OK response,
         // then throw an exception.
         throw Exception({

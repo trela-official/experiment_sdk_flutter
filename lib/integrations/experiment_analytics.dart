@@ -11,8 +11,8 @@ abstract class _Amplitude {
 class AnalyticsExposureTrackingProvider extends _Amplitude
     implements ExperimentExposureTrackingProvider {
   @override
-  void exposure(
-      String flagkey, ExperimentVariant? variant, String instanceName) {
+  Future<void> exposure(
+      String flagkey, ExperimentVariant? variant, String instanceName) async {
     final properties = {
       'instanceName': instanceName,
       'eventType': '$exposure',
@@ -24,6 +24,6 @@ class AnalyticsExposureTrackingProvider extends _Amplitude
       properties.remove('variant');
     }
 
-    _channel.invokeMethod('logEvent', jsonEncode(properties));
+    await _channel.invokeMethod('logEvent', jsonEncode(properties));
   }
 }

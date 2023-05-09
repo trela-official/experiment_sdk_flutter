@@ -1,27 +1,73 @@
+import 'dart:io';
+
+import 'package:experiment_sdk_flutter/types/experiment_config.dart';
+import 'package:experiment_sdk_flutter/types/experiment_exposure_tracking_provider.dart';
+import 'package:experiment_sdk_flutter/types/experiment_variant.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:experiment_sdk_flutter/experiment_sdk_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class CustomBindings extends AutomatedTestWidgetsFlutterBinding {
+  @override
+  bool get overrideHttpClient => false;
+}
+
+class MockedTracker implements ExperimentExposureTrackingProvider {
+   late int result;
+
+  @override
+  Future<void> exposure(
+      String flagkey, ExperimentVariant? variant, String instanceName) async {
+        // ↓ mock an result to exposure to ensure that is called
+        result = 0;
+  }
+}
 
 void main() {
-  // test('should throw error if called with wrong apikey', () {
-  //   final experiment = AmplitudeExperiment(apiKey: '');
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-  //   expect(experiment.fetch(userId: 'testing'),
-  //       throwsA(const TypeMatcher<Exception>()));
-  // });
+  setUpAll(() {
+    // ↓ required to avoid HTTP error 400 mocked returns
+    HttpOverrides.global = null;
+    SharedPreferences.setMockInitialValues({});
+  });
 
-  // test('should successfull fetch with a valid apiKey', () async {
-  //   final experiment =
-  //       AmplitudeExperiment(apiKey: 'client-sPMfBsdw5PMgfmygDb1OERXwMTQhUUch');
+  test('Should throw error if called with wrong apikey', () {
+    final experiment = Experiment.initialize('', null);
 
-  //   expect(experiment.fetch(userId: 'testing'), completion(null));
-  // });
+    expect(experiment.fetch(userId: 'testing'),
+        throwsA(const TypeMatcher<Exception>()));
+  });
 
-  // test('should has one variant', () async {
-  //   final experiment =
-  //       AmplitudeExperiment(apiKey: 'client-sPMfBsdw5PMgfmygDb1OERXwMTQhUUch');
+  test('Should succesfull fetch with a valid apiKey', () async {
+    final experiment =
+        Experiment.initialize('client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2', null);
 
-  //   await experiment.fetch(userId: 'testing');
+    expect(experiment.fetch(userId: 'testing'), completion(null));
+  });
 
-  //   expect(experiment.variant('testing-sdk')?.key, 'control');
-  // });
+  test('Should has one variant', () async {
+    final experiment =
+        Experiment.initialize('client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2', null);
+
+    await experiment.fetch(userId: 'testing');
+
+    expect(experiment.variant('testing-sdk')?.value, 'control');
+  });
+
+  test('Should successfuly call track method inside tracker', () async {
+    final mocked = MockedTracker();
+
+    final experiment = Experiment.initialize(
+        'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2',
+        ExperimentConfig(
+            automaticExposureTracking: true,
+            exposureTrackingProvider: mocked));
+
+    await experiment.fetch(userId: 'testing');
+    experiment.variant('testing-sdk');
+    experiment.exposure('testing-sdk');
+
+    expect(mocked.result, 0);
+  });
 }
