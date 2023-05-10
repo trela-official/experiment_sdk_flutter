@@ -5,7 +5,8 @@ import 'package:experiment_sdk_flutter/types/experiment_config.dart';
 final Map<String, ExperimentClient> instances = {};
 
 class Experiment {
-  static ExperimentClient initialize(String apiKey, ExperimentConfig? config) {
+  static ExperimentClient initialize(
+      {required String apiKey, ExperimentConfig? config}) {
     final instanceName = config?.instanceName;
     final instanceKey = '$instanceName.$apiKey';
 
@@ -17,12 +18,12 @@ class Experiment {
   }
 
   static ExperimentClient initializeWithAmplitude(
-      String apiKey, ExperimentConfig? config) {
+      {required String apiKey, ExperimentConfig? config}) {
     final trackExposureProvider = AnalyticsExposureTrackingProvider();
 
     final newConfig = ExperimentConfig()
         .copyWith(exposureTrackingProvider: trackExposureProvider);
 
-    return Experiment.initialize(apiKey, newConfig);
+    return Experiment.initialize(apiKey: apiKey, config: newConfig);
   }
 }

@@ -41,13 +41,8 @@ class ExperimentClient {
   }
 
   ExperimentVariant? variant(String flagKey) {
-    var variant = _httpClient.fetchResult[flagKey]?.toVariant();
-
-    if (variant == null || variant.value!.isEmpty) {
-      final result = _getSourceAndVariant(flagKey);
-
-      variant = result?.variant;
-    }
+    final sourceAndVariant = _getSourceAndVariant(flagKey);
+    final variant = sourceAndVariant?.variant;
 
     if (_config?.automaticExposureTracking != null &&
         _config!.automaticExposureTracking!) {
@@ -59,9 +54,9 @@ class ExperimentClient {
     return variant;
   }
 
-  exposure(String key) {
+  exposure(String flagKey) {
     final exposureTrackerProvider = _config?.exposureTrackingProvider;
-    final sourceAndVariant = _getSourceAndVariant(key);
+    final sourceAndVariant = _getSourceAndVariant(flagKey);
     final source = sourceAndVariant?.source;
     final variant = sourceAndVariant?.variant;
     final instanceName = _config?.instanceName ?? 'default-instance';
@@ -70,13 +65,13 @@ class ExperimentClient {
         isFallback(source) &&
         exposureTrackerProvider != null &&
         variant == null) {
-      exposureTrackerProvider.exposure(key, null, instanceName);
+      exposureTrackerProvider.exposure(flagKey, null, instanceName);
     } else if (variant != null && exposureTrackerProvider != null) {
-      exposureTrackerProvider.exposure(key, variant, instanceName);
+      exposureTrackerProvider.exposure(flagKey, variant, instanceName);
     }
 
     _log(
-        '[Experiment] Exposure event logged for $key with variant: ${variant?.value}');
+        '[Experiment] Exposure event logged for $flagKey with variant: ${variant?.value}');
   }
 
   clear() {
@@ -84,8 +79,12 @@ class ExperimentClient {
     _localStorage.save();
   }
 
+  Map<String, ExperimentVariant> all() {
+    return _localStorage.getAll();
+  }
+
   GetSourceAndVariantResult? _getSourceAndVariant(String key) {
-    final sourceVariant = _httpClient.fetchResult[key]?.toVariant();
+    final sourceVariant = _localStorage.get(key);
 
     if (sourceVariant != null) {
       return GetSourceAndVariantResult(
@@ -114,6 +113,7 @@ class ExperimentClient {
 
   _log(String message) {
     if (_config?.debug ?? false) {
+      // ignore: avoid_print
       print(message);
     }
   }

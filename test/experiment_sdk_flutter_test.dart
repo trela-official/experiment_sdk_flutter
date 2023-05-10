@@ -13,13 +13,13 @@ class CustomBindings extends AutomatedTestWidgetsFlutterBinding {
 }
 
 class MockedTracker implements ExperimentExposureTrackingProvider {
-   late int result;
+  late int result;
 
   @override
   Future<void> exposure(
       String flagkey, ExperimentVariant? variant, String instanceName) async {
-        // ↓ mock an result to exposure to ensure that is called
-        result = 0;
+    // ↓ mock an result to exposure to ensure that is called
+    result = 0;
   }
 }
 
@@ -33,22 +33,22 @@ void main() {
   });
 
   test('Should throw error if called with wrong apikey', () {
-    final experiment = Experiment.initialize('', null);
+    final experiment = Experiment.initialize(apiKey: '');
 
     expect(experiment.fetch(userId: 'testing'),
         throwsA(const TypeMatcher<Exception>()));
   });
 
   test('Should succesfull fetch with a valid apiKey', () async {
-    final experiment =
-        Experiment.initialize('client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2', null);
+    final experiment = Experiment.initialize(
+        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
 
     expect(experiment.fetch(userId: 'testing'), completion(null));
   });
 
   test('Should has one variant', () async {
-    final experiment =
-        Experiment.initialize('client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2', null);
+    final experiment = Experiment.initialize(
+        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
 
     await experiment.fetch(userId: 'testing');
 
@@ -59,15 +59,39 @@ void main() {
     final mocked = MockedTracker();
 
     final experiment = Experiment.initialize(
-        'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2',
-        ExperimentConfig(
-            automaticExposureTracking: true,
-            exposureTrackingProvider: mocked));
+        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2',
+        config: ExperimentConfig(
+            automaticExposureTracking: true, exposureTrackingProvider: mocked));
 
     await experiment.fetch(userId: 'testing');
     experiment.variant('testing-sdk');
     experiment.exposure('testing-sdk');
 
     expect(mocked.result, 0);
+  });
+
+  test('Should return a map with variant on all method', () async {
+    final experiment = Experiment.initialize(
+        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
+
+    await experiment.fetch(userId: 'testing'); 
+    final all = experiment.all();
+
+    expect(all['testing-sdk']!.value, 'control');
+  });
+
+  test('Should succesfully clear cache', () async {
+    final experiment = Experiment.initialize(
+        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
+
+    await experiment.fetch(userId: 'testing'); 
+    var all = experiment.all();
+
+    expect(all['testing-sdk']!.value, 'control');
+
+    experiment.clear();
+    all = experiment.all();
+
+    expect(all, {});
   });
 }

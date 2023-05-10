@@ -9,6 +9,6 @@ class ExperimentVariant {
   }
 
   String toJsonAsString() {
-    return {value, payload}.toString();
+    return {value: value, payload: payload}.toString();
   }
 }
