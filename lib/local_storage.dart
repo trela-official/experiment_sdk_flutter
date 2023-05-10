@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:experiment_sdk_flutter/types/experiment_variant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +42,7 @@ class LocalStorage {
     for (String key in keys) {
       dynamic value = prefs.get(key);
 
-      newMap[key] = ExperimentVariant.fromMap(value);
+      newMap[key] = ExperimentVariant.fromMap(jsonDecode(value));
     }
 
     map = newMap;

@@ -1,6 +1,6 @@
 name: experiment_sdk_flutter
 description: Experiment SDK for Flutter powered by ProductMinds
-version: 0.0.0
+version: 1.0.0-rc1
 homepage: https://github.com/productminds/experiment_sdk_flutter
 
 environment:
@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  amplitude_flutter: ^3.14.0
   flutter:
     sdk: flutter
   http: ^0.13.5

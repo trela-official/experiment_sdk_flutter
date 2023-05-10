@@ -35,7 +35,7 @@ class ExperimentClient {
     await _httpClient.get(input);
 
     _log(
-        '[Experiment] Fetched ${_httpClient.fetchResult.length} for this user!');
+        '[Experiment] Fetched ${_httpClient.fetchResult.length} experiment(s) for this user!');
 
     _storeVariants();
   }
@@ -54,7 +54,7 @@ class ExperimentClient {
     return variant;
   }
 
-  exposure(String flagKey) {
+  Future<void> exposure(String flagKey) async {
     final exposureTrackerProvider = _config?.exposureTrackingProvider;
     final sourceAndVariant = _getSourceAndVariant(flagKey);
     final source = sourceAndVariant?.source;
@@ -65,9 +65,9 @@ class ExperimentClient {
         isFallback(source) &&
         exposureTrackerProvider != null &&
         variant == null) {
-      exposureTrackerProvider.exposure(flagKey, null, instanceName);
+      await exposureTrackerProvider.exposure(flagKey, null, instanceName);
     } else if (variant != null && exposureTrackerProvider != null) {
-      exposureTrackerProvider.exposure(flagKey, variant, instanceName);
+      await exposureTrackerProvider.exposure(flagKey, variant, instanceName);
     }
 
     _log(

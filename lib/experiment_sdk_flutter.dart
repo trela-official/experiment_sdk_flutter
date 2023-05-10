@@ -21,7 +21,7 @@ class Experiment {
       {required String apiKey, ExperimentConfig? config}) {
     final trackExposureProvider = AnalyticsExposureTrackingProvider();
 
-    final newConfig = ExperimentConfig()
+    final newConfig = (config ?? ExperimentConfig())
         .copyWith(exposureTrackingProvider: trackExposureProvider);
 
     return Experiment.initialize(apiKey: apiKey, config: newConfig);
