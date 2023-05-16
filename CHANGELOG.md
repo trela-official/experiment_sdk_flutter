@@ -12,3 +12,6 @@
 ## v1.0.0-rc2
 * Fix exposure tracks
   -> In previous version this isn't working because the `instanceName` passed was wrong
+
+## v1.0.0-rc3
+* Provides an way to custom `instanceName`

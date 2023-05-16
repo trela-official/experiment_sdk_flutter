@@ -13,7 +13,7 @@ class AnalyticsExposureTrackingProvider
       properties.remove('variant');
     }
 
-    final ampli = Amplitude.getInstance();
+    final ampli = Amplitude.getInstance(instanceName: instanceName);
     await ampli.logEvent("\$exposure", eventProperties: properties);
     await ampli.uploadEvents();
   }
