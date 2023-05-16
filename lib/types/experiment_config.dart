@@ -14,7 +14,7 @@ class ExperimentConfig {
 
   ExperimentConfig(
       {this.debug = false,
-      this.instanceName = 'default-instance',
+      this.instanceName = '\$default_instance',
       this.fallbackVariant,
       this.source,
       this.fetchTimeoutMillis,

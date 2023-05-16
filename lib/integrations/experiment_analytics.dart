@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:experiment_sdk_flutter/types/experiment_exposure_tracking_provider.dart';
 import 'package:experiment_sdk_flutter/types/experiment_variant.dart';
@@ -15,7 +13,8 @@ class AnalyticsExposureTrackingProvider
       properties.remove('variant');
     }
 
-    return await Amplitude.getInstance(instanceName: instanceName)
-        .logEvent("\$exposure", eventProperties: properties);
+    final ampli = Amplitude.getInstance();
+    await ampli.logEvent("\$exposure", eventProperties: properties);
+    await ampli.uploadEvents();
   }
 }

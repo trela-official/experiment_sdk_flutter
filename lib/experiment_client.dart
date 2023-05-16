@@ -59,7 +59,7 @@ class ExperimentClient {
     final sourceAndVariant = _getSourceAndVariant(flagKey);
     final source = sourceAndVariant?.source;
     final variant = sourceAndVariant?.variant;
-    final instanceName = _config?.instanceName ?? 'default-instance';
+    final instanceName = _config?.instanceName ?? '\$default_instance';
 
     if (source != null &&
         isFallback(source) &&

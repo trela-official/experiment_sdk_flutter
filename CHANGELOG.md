@@ -5,6 +5,10 @@
 * Initial tests
 * Initial methods
 
-## V1.0.0-rc1
+## v1.0.0-rc1
 * Fix variant to json bug
 * Fix exposure method to use amplitude lib
+
+## v1.0.0-rc2
+* Fix exposure tracks
+  -> In previous version this isn't working because the `instanceName` passed was wrong
