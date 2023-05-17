@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:experiment_sdk_flutter/types/experiment_fetch_item.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +22,7 @@ class HttpClient {
   Future<void> get(QueryParameters queryParameters) async {
     final uri = Uri.https(_baseUri, '/v1/vardata', queryParameters.toJson());
     final response = await http.get(uri,
-        headers: {HttpHeaders.authorizationHeader: 'Api-Key $_apiKey'});
+        headers: {'Authorization': 'Api-Key $_apiKey'});
 
     if (response.statusCode != 200) {
       String data = response.body;
