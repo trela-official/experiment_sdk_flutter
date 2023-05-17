@@ -15,3 +15,6 @@
 
 ## v1.0.0-rc3
 * Provides an way to custom `instanceName`
+
+## v1.0.0-rc4
+* Fix README typing error 

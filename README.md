@@ -21,7 +21,7 @@ Amplitude Experiment implementation for Flutter. This is a non official package 
 <br />
 `clear`: Clear all SDK cache
 <br />
-`exposure` (works only with **initializeWithAmplitude** or by providing a custom **exposureTrackingProvider**)_: Track exposure for assigned variant in assigned experiment
+`exposure` (works only with **initializeWithAmplitude** or by providing a custom **exposureTrackingProvider**): Track exposure for assigned variant in assigned experiment
 
 ## Getting started
 
@@ -64,6 +64,7 @@ class ExperimentConfig {
       this.retryFetchOnFailure,
       this.automaticExposureTracking = false,
       this.exposureTrackingProvider});
+};
 ```
 
 ## Usage
@@ -96,5 +97,5 @@ Experiment.exposure(String flagKey);
 NOTE: works only with **initializeWithAmplitude** or by providing a custom **exposureTrackingProvider**
 
 ## Additional information
-This package is basically an wrappper to [Experiment Evaluation API](https://www.docs.developers.amplitude.com/experiment/apis/evaluation-api/) maintened by Product Minds team. If you have any problem with this license or usage, please email to antonny.santos@productminds.io.
+This package is basically an wrappper to [Experiment Evaluation API](https://www.docs.developers.amplitude.com/experiment/apis/evaluation-api/) maintened by Product Minds team. If you have any problem with this license or usage, please mail to antonny.santos@productminds.io.
 
