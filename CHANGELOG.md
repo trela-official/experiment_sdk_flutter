@@ -30,3 +30,6 @@
 
 ## v1.0.0-rc8
 * Provide an example
+
+## v1.0.0
+* First version 
