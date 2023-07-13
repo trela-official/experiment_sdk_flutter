@@ -33,3 +33,6 @@
 
 ## v1.0.0
 * First version 
+
+## v1.1.0
+* Update Amplitude dependency
