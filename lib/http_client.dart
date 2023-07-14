@@ -7,6 +7,7 @@ abstract class QueryParameters {
   Map<String, dynamic> toJson();
 }
 
+// HTTP Client Class
 class HttpClient {
   final String _apiKey;
   final String _baseUri = 'api.lab.amplitude.com';
@@ -19,6 +20,7 @@ class HttpClient {
   bool _isRetry = false;
   Map<String, ExperimentFetchItem> fetchResult = {};
 
+  /// Get function invoked on HTTP requests
   Future<void> get(QueryParameters queryParameters) async {
     final uri = Uri.https(_baseUri, '/v1/vardata', queryParameters.toJson());
     final response = await http.get(uri,

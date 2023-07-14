@@ -39,3 +39,6 @@
 
 ## v1.2.0
 * Update all dependencies
+
+## v1.3.0
+* Update dependencies and provide doc 

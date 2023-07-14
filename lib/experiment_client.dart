@@ -12,11 +12,13 @@ class GetSourceAndVariantResult {
   GetSourceAndVariantResult({this.variant, required this.source});
 }
 
+// ExperimentClient acts wrapping the APIs implementation
 class ExperimentClient {
   final ExperimentConfig? _config;
   final HttpClient _httpClient;
   final LocalStorage _localStorage;
 
+  /// ExperimentClient constructor
   ExperimentClient({required String apiKey, ExperimentConfig? config})
       : _config = config,
         _httpClient = HttpClient(
@@ -25,6 +27,7 @@ class ExperimentClient {
     _localStorage.load();
   }
 
+  /// Fetch an experiment or feature flag by user info 
   Future<void> fetch(
       {String? userId,
       String? deviceId,
@@ -40,6 +43,7 @@ class ExperimentClient {
     _storeVariants();
   }
 
+  /// Get variant assigned by flagkey 
   ExperimentVariant? variant(String flagKey) {
     final sourceAndVariant = _getSourceAndVariant(flagKey);
     final variant = sourceAndVariant?.variant;
@@ -54,6 +58,7 @@ class ExperimentClient {
     return variant;
   }
 
+  /// Track exposure event - NECESSARY `exposureTrackerProvider`
   Future<void> exposure(String flagKey) async {
     final exposureTrackerProvider = _config?.exposureTrackingProvider;
     final sourceAndVariant = _getSourceAndVariant(flagKey);
@@ -74,11 +79,13 @@ class ExperimentClient {
         '[Experiment] Exposure event logged for $flagKey with variant: ${variant?.value}');
   }
 
+  /// Clear SDK storage 
   clear() {
     _localStorage.clear();
     _localStorage.save();
   }
 
+  /// Return all experiments and flags of this users
   Map<String, ExperimentVariant> all() {
     return _localStorage.getAll();
   }
