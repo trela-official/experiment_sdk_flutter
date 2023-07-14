@@ -36,3 +36,6 @@
 
 ## v1.1.0
 * Update Amplitude dependency
+
+## v1.2.0
+* Update all dependencies
