@@ -19,7 +19,7 @@ class Experiment {
     return instances[instanceKey]!;
   }
 
-  /// Initialize ExperimentClient with Amplitude instance to handle exposure events 
+  /// Initialize ExperimentClient with Amplitude instance to handle exposure events
   static ExperimentClient initializeWithAmplitude(
       {required String apiKey, ExperimentConfig? config}) {
     final trackExposureProvider = AnalyticsExposureTrackingProvider();

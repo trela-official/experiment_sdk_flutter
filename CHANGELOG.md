@@ -42,3 +42,6 @@
 
 ## v1.3.0
 * Update dependencies and provide doc 
+
+## v1.3.1
+* Update dependecies and dart format

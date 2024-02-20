@@ -23,8 +23,8 @@ class HttpClient {
   /// Get function invoked on HTTP requests
   Future<void> get(QueryParameters queryParameters) async {
     final uri = Uri.https(_baseUri, '/v1/vardata', queryParameters.toJson());
-    final response = await http.get(uri,
-        headers: {'Authorization': 'Api-Key $_apiKey'});
+    final response =
+        await http.get(uri, headers: {'Authorization': 'Api-Key $_apiKey'});
 
     if (response.statusCode != 200) {
       String data = response.body;

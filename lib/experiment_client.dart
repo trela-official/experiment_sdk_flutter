@@ -27,7 +27,7 @@ class ExperimentClient {
     _localStorage.load();
   }
 
-  /// Fetch an experiment or feature flag by user info 
+  /// Fetch an experiment or feature flag by user info
   Future<void> fetch(
       {String? userId,
       String? deviceId,
@@ -43,7 +43,7 @@ class ExperimentClient {
     _storeVariants();
   }
 
-  /// Get variant assigned by flagkey 
+  /// Get variant assigned by flagkey
   ExperimentVariant? variant(String flagKey) {
     final sourceAndVariant = _getSourceAndVariant(flagKey);
     final variant = sourceAndVariant?.variant;
@@ -79,7 +79,7 @@ class ExperimentClient {
         '[Experiment] Exposure event logged for $flagKey with variant: ${variant?.value}');
   }
 
-  /// Clear SDK storage 
+  /// Clear SDK storage
   clear() {
     _localStorage.clear();
     _localStorage.save();

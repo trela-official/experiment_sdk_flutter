@@ -74,7 +74,7 @@ void main() {
     final experiment = Experiment.initialize(
         apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
 
-    await experiment.fetch(userId: 'testing'); 
+    await experiment.fetch(userId: 'testing');
     final all = experiment.all();
 
     expect(all['testing-sdk']!.value, 'control');
@@ -84,7 +84,7 @@ void main() {
     final experiment = Experiment.initialize(
         apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2');
 
-    await experiment.fetch(userId: 'testing'); 
+    await experiment.fetch(userId: 'testing');
     var all = experiment.all();
 
     expect(all['testing-sdk']!.value, 'control');
