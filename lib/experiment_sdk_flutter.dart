@@ -1,5 +1,4 @@
 import 'package:experiment_sdk_flutter/experiment_client.dart';
-import 'package:experiment_sdk_flutter/integrations/experiment_analytics.dart';
 import 'package:experiment_sdk_flutter/types/experiment_config.dart';
 
 final Map<String, ExperimentClient> instances = {};
@@ -22,10 +21,7 @@ class Experiment {
   /// Initialize ExperimentClient with Amplitude instance to handle exposure events
   static ExperimentClient initializeWithAmplitude(
       {required String apiKey, ExperimentConfig? config}) {
-    final trackExposureProvider = AnalyticsExposureTrackingProvider();
-
-    final newConfig = (config ?? ExperimentConfig())
-        .copyWith(exposureTrackingProvider: trackExposureProvider);
+    final newConfig = config ?? ExperimentConfig();
 
     return Experiment.initialize(apiKey: apiKey, config: newConfig);
   }

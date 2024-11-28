@@ -48,36 +48,11 @@ class ExperimentClient {
     final sourceAndVariant = _getSourceAndVariant(flagKey);
     final variant = sourceAndVariant?.variant;
 
-    if (_config?.automaticExposureTracking != null &&
-        _config!.automaticExposureTracking!) {
-      exposure(flagKey);
-    }
-
     _log('[Experiment] Variant for $flagKey is ${variant?.value}');
 
     return variant;
   }
 
-  /// Track exposure event - NECESSARY `exposureTrackerProvider`
-  Future<void> exposure(String flagKey) async {
-    final exposureTrackerProvider = _config?.exposureTrackingProvider;
-    final sourceAndVariant = _getSourceAndVariant(flagKey);
-    final source = sourceAndVariant?.source;
-    final variant = sourceAndVariant?.variant;
-    final instanceName = _config?.instanceName ?? '\$default_instance';
-
-    if (source != null &&
-        isFallback(source) &&
-        exposureTrackerProvider != null &&
-        variant == null) {
-      await exposureTrackerProvider.exposure(flagKey, null, instanceName);
-    } else if (variant != null && exposureTrackerProvider != null) {
-      await exposureTrackerProvider.exposure(flagKey, variant, instanceName);
-    }
-
-    _log(
-        '[Experiment] Exposure event logged for $flagKey with variant: ${variant?.value}');
-  }
 
   /// Clear SDK storage
   clear() {

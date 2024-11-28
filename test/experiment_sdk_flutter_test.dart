@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:experiment_sdk_flutter/types/experiment_config.dart';
-import 'package:experiment_sdk_flutter/types/experiment_exposure_tracking_provider.dart';
-import 'package:experiment_sdk_flutter/types/experiment_variant.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:experiment_sdk_flutter/experiment_sdk_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,17 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CustomBindings extends AutomatedTestWidgetsFlutterBinding {
   @override
   bool get overrideHttpClient => false;
-}
-
-class MockedTracker implements ExperimentExposureTrackingProvider {
-  late int result;
-
-  @override
-  Future<void> exposure(
-      String flagkey, ExperimentVariant? variant, String instanceName) async {
-    // ↓ mock an result to exposure to ensure that is called
-    result = 0;
-  }
 }
 
 void main() {
@@ -53,21 +39,6 @@ void main() {
     await experiment.fetch(userId: 'testing');
 
     expect(experiment.variant('testing-sdk')?.value, 'control');
-  });
-
-  test('Should successfuly call track method inside tracker', () async {
-    final mocked = MockedTracker();
-
-    final experiment = Experiment.initialize(
-        apiKey: 'client-SyuVa4OF1vMBD5F59JMRwcZJutII4gZ2',
-        config: ExperimentConfig(
-            automaticExposureTracking: true, exposureTrackingProvider: mocked));
-
-    await experiment.fetch(userId: 'testing');
-    experiment.variant('testing-sdk');
-    experiment.exposure('testing-sdk');
-
-    expect(mocked.result, 0);
   });
 
   test('Should return a map with variant on all method', () async {
